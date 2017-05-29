@@ -1,0 +1,17 @@
+{
+  "name": "tspersistentprng",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "repository": "github.com/iskolbin/tspersistentprng",
+  "description": "Persistent CMWC1024 PRNG implementation for TS",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm lib/*; ./node_modules/typescript/bin/tsc",
+    "page": "./node_modules/typescript/bin/tsc -m amd --outFile public/dist.js -d false --sourceMap false",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.3"
+  }
+}
