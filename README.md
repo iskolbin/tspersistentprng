@@ -1,3 +1,5 @@
+![Build Status](https://travis-ci.org/iskolbin/tspersistentprng.svg?branch=master)
+
 Persistent PRNG
 ===============
 
