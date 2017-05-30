@@ -2,6 +2,7 @@
 src
 node_modules
 test*
+public*
 coverage*
 yarn.lock
 tsconfig.json
