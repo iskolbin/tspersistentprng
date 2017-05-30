@@ -3,7 +3,7 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "repository": "github.com/iskolbin/tspersistentprng",
-  "description": "Persistent CMWC1024 PRNG implementation for TS",
+  "description": "Persistent CMWC4096 PRNG implementation for TS",
   "version": "0.2.0",
   "license": "MIT",
   "scripts": {
