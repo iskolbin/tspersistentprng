@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<script>(function(){var b=window;b.define=function(c,a,d){a=[,b[c]||{}].concat(a.slice(2).map(function(a){b[a]=b[a]||{};return b[a]}));d.apply(null,a);b[c]=a[1]}})();</script>
+		<script src="./dist.js"></script>
+		<style>body, html, canvas { margin: 0; padding: 0; background-color: #000 }</style>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+<script>
+var prng = new window.Prng.Prng( 42 );
+var canvas = document.getElementById( 'canvas' );
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var context = canvas.getContext('2d');
+var pointsPerRender = 10000;
+var generating = true;
+var pred = 0
+
+function render( current ) {
+	var dt = current - pred
+	if ( generating ) {
+		pred = current;
+		if ( dt > 42 ) {
+			pointsPerRender *= 0.95;
+			pointsPerRender |= 0;
+		} else if ( dt < 25 ) {
+			pointsPerRender *= 1.1;
+			pointsPerRender |= 0;
+		}
+		context.fillStyle = "rgba(0,0,0,0.1)";
+		context.fillRect( 0, 0, canvas.width, canvas.height );
+		context.fillStyle = "white";
+		for ( var i = 0; i < pointsPerRender; i++ ) {
+			var x = prng.random() * canvas.width;
+			prng = prng.next()
+			var y = prng.random() * canvas.height;
+			prng = prng.next()
+			context.fillRect( x, y, 2, 2 );
+		}
+	}
+	window.requestAnimationFrame( render );
+}
+
+window.requestAnimationFrame( render );
+window.addEventListener( 'resize', function() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+});
+window.addEventListener( 'mousedown', function() {
+	generating = !generating;
+});
+
+</script>
+	</body>
+</html>

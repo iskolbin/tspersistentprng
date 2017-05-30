@@ -1,25 +1,54 @@
-const LAG = 1024
-
 export class Prng {
-	protected Q: Uint32Array[]
-	constructor( 
-		protected c: number = 2207,
-		protected _value: number = 0,
-		Q?: Uint32Array[],
-		protected i: number = LAG - 1
-	) {
-		if ( Q === undefined ) {
-			this.Q = new Array<Uint32Array>(32)
-			for ( let i = 0; i < 32; i++ ) {
-				this.Q[i] = new Uint32Array(32)
+	protected Qc: Uint32Array
+	protected i: number
+
+	constructor( seed: number = 42, prev?: Prng ) {
+		if ( prev === undefined || prev.i === 0 ) {
+			const Qc = new Uint32Array( 4097 )
+
+			if ( prev === undefined ) {
+				Qc[4096] = seed
+				for ( let i = 0; i < 4096; i++ ) {
+					Qc[4096] *= 129749
+					Qc[4096] *= 8505
+					Qc[4096] += 12345
+					Qc[i] = Qc[4096]
+				}
+				Qc[4096] *= 129749
+				Qc[4096] *= 8505
+				Qc[4096] += 12345
+				Qc[4096] %= 809430660
 			}
+
+			const prevQc = prev === undefined ? Qc : prev.Qc
+			let c = prevQc[4096]
+			for ( let i = 1; i < 4096; i++ ) {
+				let t = 18782 * prevQc[i] + c
+				c = (t / 4294967296) | 0
+				let x = (t + c) % 0x100000000
+				if ( x < c ) {
+					x++
+					c++
+				}
+
+				if( x === 0xffffffff ) {
+					c++
+					x = 0
+				}
+
+				Qc[i] = 0xfffffffe - x
+			}
+			Qc[4096] = c
+			this.Qc = Qc
+			this.i = 1
 		} else {
-			this.Q = Q
+			this.Qc = prev.Qc
+			this.i = (prev.i + 1) % 4096
 		}
 	}
 
 	get value() {
-		return this._value
+		return this.Qc[this.i]
 	}
 
 	random( min: number = 0.0, max: number = 1.0 ): number {
@@ -31,26 +60,6 @@ export class Prng {
 	}
 
 	next(): Prng {
-		const newI = ( this.i + 1 ) % LAG
-		const t = 18782 * this.value + this.c
-		let newC = t >> 32
-		let x = (t + newC) % 0xffffffff
-		let newValue = 0xfffffffe - x
-		if ( x < newC ) {
-			newValue--
-			newC++
-		}
-		const ii = newI >> 5
-		const jj = newI & 31
-		const newQ = new Array<Uint32Array>( 32 )
-		const oldq = this.Q[ii]
-		const q = new Uint32Array( 32 )
-		for ( let i = 0; i < 32; i++ ) {
-			newQ[i] = this.Q[i]
-			q[i] = oldq[i]
-		}
-		q[jj] = newValue
-		newQ[ii] = q
-		return new Prng( newC, newValue, newQ, newI )
+		return new Prng( 0, this )
 	}
 }
