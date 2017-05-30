@@ -34,8 +34,8 @@ function render( current ) {
 		for ( var i = 0; i < pointsPerRender; i++ ) {
 			var x = prng.random() * canvas.width;
 			prng = prng.next()
-			var y = prng.random() * canvas.height;
-			prng = prng.next()
+			var y = prng.random64() * canvas.height;
+			prng = prng.next().next()
 			context.fillRect( x, y, 2, 2 );
 		}
 	}

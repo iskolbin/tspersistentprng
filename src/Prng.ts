@@ -59,6 +59,16 @@ export class Prng {
 		}
 	}
 
+	random64( min: number = 0.0, max: number = 1.0 ): number {
+		if ( min > max ) {
+			return min
+		} else {
+			const a = Math.floor(this.value / 32)
+			const b = Math.floor((this.Qc[(this.i === 0) ? 4095 : this.i-1]) / 64)
+			return min + (a * 67108864.0 + b) * (max - min) / 9007199254740992.0
+		}
+	}
+
 	next(): Prng {
 		return new Prng( 0, this )
 	}

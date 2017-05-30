@@ -4,7 +4,7 @@
   "typings": "./lib/index.d.ts",
   "repository": "github.com/iskolbin/tspersistentprng",
   "description": "Persistent CMWC4096 PRNG implementation for TS",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "scripts": {
     "build": "rm lib/*; ./node_modules/typescript/bin/tsc",
