@@ -4,13 +4,13 @@
   "types": "./lib/index.d.ts",
   "repository": "github.com/iskolbin/tspersistentprng",
   "description": "Persistent CMWC4096 PRNG implementation for TS",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "iskolbin",
   "license": "MIT",
   "scripts": {
-    "build": "rm lib/*; ./node_modules/typescript/bin/tsc",
+    "lib": "rm lib/*; ./node_modules/typescript/bin/tsc",
     "page": "./node_modules/typescript/bin/tsc -m amd --outFile public/dist.js -d false --sourceMap false",
-    "prepublish-on-install": "npm run build"
+    "prepare": "npm run lib"
   },
   "devDependencies": {
     "typescript": "^2.3.3"
