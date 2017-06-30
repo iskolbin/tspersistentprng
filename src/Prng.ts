@@ -1,3 +1,8 @@
+// TODO
+// Fix edge case in random64: if i === 0 it just takes from i = 4095
+// this is crap, because this creates bias. Probably should store
+// another value in Qc: make it 4098 elements
+
 export interface DataNative {
 	kind: 'Native'
 	Qc: number[]
@@ -10,7 +15,9 @@ export interface DataUint32 {
 	i: number
 }
 
-export type Data = DataNative | DataUint32
+export type Data
+	= DataNative
+	| DataUint32
 
 export function make( seed: number = 42, uint32 = false ): Data {
 	const kind = uint32 ? 'Uint32' : 'Native'
@@ -21,25 +28,26 @@ export function make( seed: number = 42, uint32 = false ): Data {
 		newData = { kind, Qc: new Uint32Array( 4097 ), i: 0 }
 	}
 	const Qc = newData.Qc
-	Qc[4096] = seed
+	let c = seed
 	for ( let i = 0; i < 4096; i++ ) {
-		Qc[4096] *= 129749
-		Qc[4096] %= 0x100000000
-		Qc[4096] *= 8505
-		Qc[4096] += 12345
-		Qc[4096] %= 0x100000000
-		Qc[i] = Qc[4096]
+		c *= 129749
+		c %= 0x100000000
+		c *= 8505
+		c += 12345
+		c %= 0x100000000
+		Qc[i] = c
 	}
-	Qc[4096] *= 129749
-	Qc[4096] %= 0x100000000
-	Qc[4096] *= 8505
-	Qc[4096] += 12345
-	Qc[4096] %= 0x100000000
-	Qc[4096] %= 809430660
+	c *= 129749
+	c %= 0x100000000
+	c *= 8505
+	c += 12345
+	c %= 0x100000000
+	c %= 809430660
+	Qc[4096] = c
 	return newData
 }
 
-export function srand( data: Data ): Data {
+function nextChunk( data: Data ): Data {
 	const {kind} = data
 	let newData: Data
 	if ( kind === 'Native' ) {
@@ -98,7 +106,7 @@ export function next( data: Data ): Data {
 	if ( i < 4095 ) {
 		return { ...data, i: i+1 }
 	} else {
-		return srand( data )
+		return nextChunk( data )
 	}
 }
 
@@ -106,7 +114,7 @@ export class Prng {
 	data: Data
 
 	constructor( seed: number = 42, uint32 = true ) {
-		this.data = srand( make( seed, uint32 ))
+		this.data = nextChunk( make( seed, uint32 ))
 	}
 
 	rand() {

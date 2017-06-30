@@ -11,35 +11,37 @@ This library implements persistent PRNG which means it doesn't mutate internal
 state, it just returns new state. So it's perfectlly ok to use for example 
 in [Redux reducers](http://redux.js.org/docs/basics/Reducers.html).
 
-new( seed: number )
--------------------
+Prng.make( seed: number, uint32 = false ): Prng.Data
+----------------------------------------------------
 
 Create new PRNG instance. Initialization procedure is based on [LCG](
 https://en.wikipedia.org/wiki/Linear_congruential_generator) and is borrowed
-from [libtcod](http://roguecentral.org/doryen/libtcod/) sources.
+from [libtcod](http://roguecentral.org/doryen/libtcod/) sources. For more
+compact representatin you can set `uint32 = true` for `Uint32Array`.
+By default uses standartJS arrays.
 
-value: number
--------------
+Prng.rand( prng: Prng.Data ): number
+------------------------------------
 
 Returns current pseudorandom number from stored table. Value itself is 
 unsigned 32bit integer.
 
-random( min: number = 0.0, max: number = 1.0 ): number
-------------------------------------------------------
+Prng.random( prng: Prng.Data, min: number = 0.0, max: number = 1.0 ): number
+----------------------------------------------------------------------------
 
 Returns current pseudorandom number which uniformly distributed in [min,max).
 By default min = 0 and max = 1, which mimics `Math.random()`. Note that the
 number has only 32-bit precision. If `min >= max` returns `min`.
 
-random64( min: number = 0.0, max: number = 1.0 ): number
-------------------------------------------------------
+Prng.random64( prng: Prng.Data, min: number = 0.0, max: number = 1.0 ): number
+------------------------------------------------------------------------------
 
 Same as `random` but uses 2 numbers to form 64-bit precision float. Uses current
 and previous pseudorandom value, so don't forget to do `next()` twice before
-use this function.
+use this function. 
 
-next(): Prng
-------------
+Prng.next( prng: Prng.Data): Prng.Data
+--------------------------------------
 
 Generates next pseudorandom number for use by `value` or `random`. Returns
 new generator.
