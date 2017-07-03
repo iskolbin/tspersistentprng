@@ -2,9 +2,14 @@
   "name": "tspersistentprng",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "repository": "github.com/iskolbin/tspersistentprng",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iskolbin/tspersistentprng.git"
+  },
+  "bugs": "https://github.com/iskolbin/tspersistentprng/issues",
   "description": "Persistent CMWC4096 PRNG implementation for TS",
-  "version": "0.4.1",
+  "keywords": ["persistent","prng","rng","cmwc","cmwc4096"],
+  "version": "0.4.2",
   "author": "iskolbin",
   "license": "MIT",
   "scripts": {
