@@ -19,8 +19,8 @@ Prng.make( seed: number, uint32 = false ): Prng.Data
 Create new PRNG instance. Initialization procedure is based on [LCG](
 https://en.wikipedia.org/wiki/Linear_congruential_generator) and is borrowed
 from [libtcod](http://roguecentral.org/doryen/libtcod/) sources. For more
-compact representatin you can set `uint32 = true` for `Uint32Array`.
-By default uses standartJS arrays.
+compact representation you can set `uint32 = true` for `Uint32Array`.
+By default uses standart JS arrays.
 
 Prng.rand( prng: Prng.Data ): number
 ------------------------------------
